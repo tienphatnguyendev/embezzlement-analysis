@@ -1,0 +1,3 @@
+employee_id,employer_entity_id,name,bank,account,address,tax_id,evidence_ref
+employee,buyer,Example Employee,3,PERSONAL,10 Example Lane,DEMO-EMPLOYEE-TAX,demo:authorized-hr-and-account-records
+unrelated-employee,buyer,Example Other Employee,3,OTHER-PERSONAL,70 Other Road,DEMO-OTHER-TAX,demo:other-employee-record

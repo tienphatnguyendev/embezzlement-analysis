@@ -2,6 +2,8 @@
 
 Date: 2026-10-15. Scope: local research and investigator support using synthetic data.
 
+This document records the initial baseline. Version 0.2 extends it with the [completion plan](completion-plan.md) and [investigation input contracts](checks.md).
+
 ## Intent and assumptions
 
 Investigate the hypothesis company → intermediary → personal account. The user requested a repository grounded in ACFE methods and IBM's AMLworld paper. Start with a Python command-line tool, SQLite, and standard-library tests. No service or credentials are needed. A local Git repository is the deliverable; remote hosting can follow separately.

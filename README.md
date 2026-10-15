@@ -2,7 +2,16 @@
 
 A local research baseline for reviewing **company → intermediary → personal account** hypotheses. Python 3.9+, SQLite, no runtime dependencies. Findings are candidate payment paths, not findings of guilt or quantified losses.
 
-The repository combines an [ACFE methodology review](docs/acfe-methodology.md), the [IBM AMLworld data card](docs/ibm-data-card.md), an importer, a bounded path search, and source-linked JSON reports. [Design](docs/design.md) · [Implementation plan](docs/implementation-plan.md).
+The repository combines an [ACFE methodology review](docs/acfe-methodology.md), the [IBM AMLworld data card](docs/ibm-data-card.md), an importer, bounded path search, vendor/employee comparisons, invoice/approval checks, and source-linked JSON reports. [Complete workflow and schemas](docs/checks.md) · [Design](docs/design.md) · [Completion plan](docs/completion-plan.md).
+
+## Run the complete investigation
+
+```sh
+python3 -m embezzlement_analysis ingest examples/demo_transactions.csv --db data/demo.sqlite
+python3 -m embezzlement_analysis investigate --db data/demo.sqlite --bank 1 --account VICTIM --ibm-accounts examples/ibm_accounts.csv --context examples/demo_context.csv --vendors examples/vendors.csv --employees examples/employees.csv --invoices examples/invoices.csv --purchase-orders examples/purchase_orders.csv --receipts examples/receipts.csv
+```
+
+This command joins the available review evidence by account and vendor identity. Use `--output reports/investigation.json` to save a new report. Standalone `check-masters` and `check-invoices` commands are also available; see [input contracts](docs/checks.md).
 
 ## Run the authored demo
 
@@ -59,12 +68,12 @@ bank,account,entity_id,entity_type,entity_name,employee_of,evidence_ref
 
 `entity_type` is `business`, `person`, or `unknown`. `employee_of` holds the employer's **entity ID**, not account number. Every supplied record needs an evidence reference. IDs are exact strings; only numeric bank formatting is normalized. Conflicting records are rejected. Unknown accounts remain unknown. Context is hashed from the same bytes that were parsed.
 
-IBM's account file contains entity names and IDs but does not establish employee relationships or shell-company status. Its raw schema is not this context schema; v0 does not automatically import it. An adapter should preserve the original source and distinguish supplied facts from derived classifications.
+IBM's account file contains entity names and IDs but does not establish employee relationships or shell-company status. Supply it with `--ibm-accounts`; the adapter preserves source references and marks classifications derived from synthetic names. Explicit context can add compatible sourced relationships.
 
 ## Interpretation and next steps
 
 An apparent onward payment does not establish that it used the same money. Accounts can mix unrelated funds; paths overlap. Never sum path amounts into a loss total. Equal-minute payments are excluded because IBM does not establish their order. Missing transfers and unknown identities remain evidence gaps.
 
-Next: add vendor/employee master comparisons, invoice–purchase-order–receipt matching, authorization checks, then evaluate against independently labeled cases with legitimate lookalikes. [Evaluation plan](docs/evaluation.md) explains what can and cannot be measured now. OCR, split/merge fund allocation, ownership inference, invoice tests, and trained classifiers are outside this version.
+Version 0.2 includes vendor/employee master comparisons, invoice–purchase-order–receipt checks, and approval-identifier checks. Next, evaluate against independently labeled cases with legitimate lookalikes. [Evaluation plan](docs/evaluation.md) explains what can and cannot be measured now. Bank-specific OCR, split/merge fund allocation, ownership inference and trained classifiers require further work.
 
 Local source data, databases, and generated reports are ignored by Git. Keep a separate evidence-handling process for real cases; file fingerprints alone are not a complete custody record. IBM data remains subject to its publisher's CDLA-Sharing-1.0 terms; documentation references ACFE without claiming ACFE certification or endorsement.

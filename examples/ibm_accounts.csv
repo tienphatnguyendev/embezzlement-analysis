@@ -1,0 +1,7 @@
+Bank Name,Bank ID,Account Number,Entity ID,Entity Name
+Authored Demo Bank One,001,VICTIM,buyer,Example Buyer Ltd
+Authored Demo Bank Two,002,INTERMEDIARY,vendor,Example Intermediary Ltd
+Authored Demo Bank Three,003,PERSONAL,employee,Example Employee
+Authored Demo Bank Four,004,PERSONAL_SAVINGS,employee,Example Employee
+Authored Demo Bank Two,002,SUPPLIER,supplier,Example Supplier Ltd
+Authored Demo Bank Three,003,SUPPLIER_WORKER,supplier-worker,Example Supplier Worker

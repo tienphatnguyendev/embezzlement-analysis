@@ -2,11 +2,11 @@
 
 Research accessed: **2026-10-15**. This document uses primary ACFE resources and articles published by ACFE's Fraud Magazine. It distinguishes their guidance from this repository's engineering choices. ACFE has not certified or endorsed this software.
 
-## Purpose and v0 boundary
+## Purpose and version 0.2 boundary
 
-v0 finds **candidate transaction paths** from a selected business account, through an intermediate account, to a destination account. Optional, evidence-backed account context can describe business/personal roles and employee relationships. A candidate means that records meet the configured selection rules; it does not establish theft, a fictitious vendor, ownership, intent, or guilt.
+The software finds **candidate transaction paths** from a selected business account, through an intermediate account, to a destination account. Optional, evidence-backed account context can describe business/personal roles and employee relationships. A candidate means that records meet the configured selection rules; it does not establish theft, a fictitious vendor, ownership, intent, or guilt.
 
-Invoice analysis, vendor-master comparisons, purchasing controls and proof-of-delivery tests are future work. A bank transfer alone cannot establish that an invoice was false or that a vendor supplied nothing. Account context supplied by an analyst remains an attributed assertion until its supporting evidence is checked.
+Version 0.2 adds master-record comparisons, document-level invoice/PO/receipt exceptions, and approval-identifier checks. Detailed delivery verification, contract pricing and organization-specific approval policies still require further evidence. A bank transfer alone cannot establish that an invoice was false or that a vendor supplied nothing. Account context supplied by an analyst remains an attributed assertion until its supporting evidence is checked.
 
 ## Verified source register
 
@@ -63,14 +63,14 @@ All entries below were accessed on **2026-10-15**. Source summaries paraphrase t
 
 ## Methods, required data and implementation mapping
 
-The designs in the last column are **our engineering interpretations**, not prescribed ACFE algorithms. “Future” means the v0 implementation does not perform that test.
+The designs in the last column are **our engineering interpretations**, not prescribed ACFE algorithms. “Future” means the current implementation does not perform that test. [Input contracts and commands](checks.md) define the implemented checks precisely.
 
 | Method and source | Required data | Repository application |
 | --- | --- | --- |
 | Examine cash movements (ACFE-04) | Directed transactions with unique IDs, both account IDs, timestamps, amount, currency and source references | **v0:** enumerate observable account-to-account paths; expose each leg and its time/amount comparison. Report missing downstream coverage. |
 | Investigate account/entity relationships (ACFE-01) | Account/entity mappings, relationship type, source evidence and effective dates where known | **v0 optional context:** attach sourced roles. Preserve unknowns; do not infer personal ownership from an account name or classify a business as fraudulent. |
-| Employee/vendor connections (ACFE-02) | Employee and vendor identifiers plus banking/ownership evidence | **v0 optional context:** attach explicit documented employee links. **Future:** compare full master files, preserving match fields and ambiguity for review. |
-| Test procurement/payment consistency (ACFE-02) | Invoice header/lines, purchase orders, receipts, payment allocation, approval events and company limits | **Future:** duplicate groups, three-way-match exceptions and split-order candidates. Use organization-specific limits; distinguish repeated invoice lines, credits and legitimate instalments. |
+| Employee/vendor connections (ACFE-02) | Employee and vendor identifiers plus banking/ownership evidence | **Implemented:** compare supplied account, tax, address and name values; retain matched fields and ambiguity. Explicit context can separately document employment. |
+| Test procurement/payment consistency (ACFE-02) | Document-level invoices, purchase orders, monetary receipts and approval identifiers | **Implemented:** duplicate references, grouped amount/support exceptions and approver overlap, including purchase/payment approval. **Future:** dated approvals, split orders and organization-specific limits. |
 | Test delivery and price rationale (ACFE-03) | Contract terms, delivery receipts, time records, item quantities/rates and invoices | **Future:** compare billed work and prices against documented delivery and contractual expectations. Bank-only inputs cannot run this test. |
 | Reassess investigative basis (ACFE-05) | Allegation, scope, source coverage and competing explanations | **Design:** keep the analyst's case rationale distinct from automated candidate criteria. A positive match does not automatically establish predication. |
 | Evidence-supported reporting (ACFE-06) | Findings, supporting references, contradictory records and unresolved gaps | **Design:** separate observations from interpretation; record exculpatory evidence (facts that weaken an allegation) alongside supporting evidence. |
@@ -88,6 +88,6 @@ Missing records do not mean that no transaction occurred. “No candidate found�
 
 An observed transfer proves only what the supplied record documents. A path connects transactions by account, order and configured similarity; it does not prove that the exact same funds financed the next payment. Mixed funds, earlier balances, unobserved deposits, refunds and overlapping candidate paths make that inference unsafe without a separate tracing method.
 
-**v0 performs no loss aggregation and no mixed-funds attribution.** Do not add the amounts of every leg or every overlapping path and call the result stolen funds, loss, proceeds or recovery. Report individual transaction amounts and candidate counts. Leave financial attribution unresolved.
+**The software performs no loss aggregation and no mixed-funds attribution.** Do not add the amounts of every leg or every overlapping path and call the result stolen funds, loss, proceeds or recovery. Report individual transaction amounts and candidate counts. Leave financial attribution unresolved.
 
 A review should preserve reasonable alternative explanations, conflicting account mappings, documented legitimate services and repayments. Label outcomes as candidates or observations. “Shell company,” “employee-linked account” and “personal account” require their own evidence; none is synonymous with fraud. The software cannot certify a forensic conclusion or establish guilt.

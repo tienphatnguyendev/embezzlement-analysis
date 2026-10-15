@@ -1,0 +1,3 @@
+po_id,vendor_id,amount,currency,requested_by,approved_by,evidence_ref
+PO-CLEAN,supplier,100,USD,buyer-a,manager-a,authored:po-clean
+PO-REVIEW,vendor,100,USD,same-requester,same-requester,authored:po-review

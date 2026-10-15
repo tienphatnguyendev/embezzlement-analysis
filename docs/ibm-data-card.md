@@ -26,7 +26,7 @@ The importer validates this exact header and reads by position so duplicate head
 
 Use `(normalized bank ID, exact account number)` as the account identity. For example, transaction bank `001` matches account-file bank `1`. Never turn account numbers into integers. This approach is consistent with the bank/account distinction in [IBM's reference preprocessing](https://github.com/IBM/Multi-GNN/blob/main/format_kaggle_files.py).
 
-The accounts file has `Bank Name,Bank ID,Account Number,Entity ID,Entity Name`. Any type inferred from a synthetic entity name is a derived classification. The file does not provide employment links, invoice records, ownership edges, or confirmed shell labels. Account-file integration is future work.
+The accounts file has `Bank Name,Bank ID,Account Number,Entity ID,Entity Name`. Any type inferred from a synthetic entity name is a derived classification. The file does not provide employment links, invoice records, ownership edges, or confirmed shell labels. Version 0.2 integrates this file through `--ibm-accounts`, retaining derived-classification provenance and rejecting contradictory explicit context.
 
 No global transaction identifier is supplied. We retain `(source SHA-256, CSV record number)` and preserve repeated rows. That identifies evidence within an export; it cannot deduplicate overlapping exports or mirrored entries across bank statements.
 

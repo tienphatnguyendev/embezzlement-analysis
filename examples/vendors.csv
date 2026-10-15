@@ -1,0 +1,4 @@
+vendor_id,name,bank,account,address,tax_id,evidence_ref
+vendor,Example Intermediary Ltd,2,INTERMEDIARY,10 Example Lane,DEMO-VENDOR-TAX,demo:vendor-register
+employee-services,Example Employee Services,3,PERSONAL,20 Example Avenue,DEMO-SERVICES-TAX,demo:vendor-onboarding
+supplier,Example Supplier Ltd,2,SUPPLIER,90 Supplier Road,DEMO-SUPPLIER-TAX,demo:supplier-register

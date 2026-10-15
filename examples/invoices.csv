@@ -1,0 +1,6 @@
+invoice_id,vendor_id,invoice_number,po_id,amount,currency,invoice_approved_by,payment_approved_by,evidence_ref
+INsupplier-1,supplier,SUP-001,PO-CLEAN,40,USD,reviewer-a,payer-a,authored:invoice-clean-1
+INsupplier-2,supplier,SUP-002,PO-CLEAN,35,USD,reviewer-a,payer-a,authored:invoice-clean-2
+INV-UNSUPPORTED,vendor,REVIEW-001,,250,USD,reviewer-b,payer-b,authored:invoice-unsupported
+INV-REPEAT-1,vendor,REVIEW-002,PO-REVIEW,60,USD,same-approver,same-approver,authored:invoice-repeat-1
+INV-REPEAT-2,vendor,REVIEW-002,PO-REVIEW,60,USD,reviewer-b,,authored:invoice-repeat-2

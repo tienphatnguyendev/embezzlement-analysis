@@ -1,0 +1,4 @@
+receipt_id,po_id,vendor_id,amount,currency,evidence_ref
+RECEIPT-CLEAN-1,PO-CLEAN,supplier,25,USD,authored:receipt-clean-1
+RECEIPT-CLEAN-2,PO-CLEAN,supplier,50,USD,authored:receipt-clean-2
+RECEIPT-REVIEW,PO-REVIEW,vendor,80,USD,authored:receipt-review
