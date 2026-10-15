@@ -1,0 +1,7 @@
+bank,account,entity_id,entity_type,entity_name,employee_of,evidence_ref
+1,VICTIM,buyer,business,Example Buyer Ltd,,demo:company-register
+2,INTERMEDIARY,vendor,business,Example Intermediary Ltd,,demo:vendor-register
+3,PERSONAL,employee,person,Example Employee,buyer,demo:authorized-hr-and-account-records
+4,PERSONAL_SAVINGS,employee,person,Example Employee,buyer,demo:authorized-hr-and-account-records
+2,SUPPLIER,supplier,business,Example Supplier Ltd,,demo:supplier-register
+3,SUPPLIER_WORKER,supplier-worker,person,Example Supplier Worker,supplier,demo:supplier-payroll-record
