@@ -4,6 +4,8 @@ A local research baseline for reviewing **company → intermediary → personal 
 
 The repository combines an [ACFE methodology review](docs/acfe-methodology.md), the [IBM AMLworld data card](docs/ibm-data-card.md), an importer, bounded path search, vendor/employee comparisons, invoice/approval checks, and source-linked JSON reports. [Complete workflow and schemas](docs/checks.md) · [Design](docs/design.md) · [Completion plan](docs/completion-plan.md).
 
+The [EDA notebook](notebooks/hi_small_eda.ipynb) explores the full ledger, source coverage, temporal artifacts, currency-specific amounts and overlapping candidate paths. [Notebook setup and execution](notebooks/README.md) describes the optional analysis dependencies and generated outputs.
+
 ## Scan the full IBM dataset
 
 Version 0.3 adds a complete two-payment business → business → person scan. It streams every selected chain to JSONL and compares labels only after selection. [Full-run method and limits](docs/full-hi-small-method.md) · [Measured HI-Small results](docs/full-hi-small-results.md).
