@@ -8,6 +8,12 @@ The [EDA notebook](notebooks/hi_small_eda.ipynb) explores the full ledger, sourc
 
 All ten figures use interactive Plotly visualizations styled with the user-selected Deloitte Data Design system. [Presentation review](docs/eda-design-review.md) records the tokens, font provenance and browser checks.
 
+## Public EDA outputs
+
+[Download the executed notebook and offline interactive report](https://github.com/tienphatnguyendev/embezzlement-analysis/releases/tag/v0.3.0). The recommended `hi-small-eda-offline.zip` contains the report, notebook, figure specifications, execution metadata, checksums and third-party notices. Extract it and open `hi_small_eda.html`; no server or internet connection is required. The source notebook in Git keeps its outputs cleared.
+
+The full analysis covers 5,078,345 synthetic transactions. Raw IBM data, the SQLite database and workspace files stay outside Git. Download the original dataset from the publisher to reproduce the computation. [Third-party and data notices](THIRD_PARTY_NOTICES.md).
+
 ## Scan the full IBM dataset
 
 Version 0.3 adds a complete two-payment business → business → person scan. It streams every selected chain to JSONL and compares labels only after selection. [Full-run method and limits](docs/full-hi-small-method.md) · [Measured HI-Small results](docs/full-hi-small-results.md).
@@ -59,7 +65,7 @@ python3 -m embezzlement_analysis ingest data/raw/HI-Small_Trans.csv --db data/ib
 python3 -m embezzlement_analysis trace --db data/ibm.sqlite --bank BANK_ID --account ACCOUNT_ID --max-hops 3 --window-hours 72
 ```
 
-Replace `BANK_ID` and `ACCOUNT_ID` with an account in that dataset. The tool rejects origins without outgoing records. Imports stream CSV rows, although indexing a full five-million-row file takes longer than the demo. Full-dataset performance has not been benchmarked.
+Replace `BANK_ID` and `ACCOUNT_ID` with an account in that dataset. The tool rejects origins without outgoing records. Imports stream CSV rows, although indexing the full file takes longer than the demo. The [measured HI-Small run](docs/full-hi-small-results.md) records the full import and scan timings; these are measurements on one local environment, not a general performance benchmark.
 
 The initial workspace includes a separately downloaded **10,701-row prefix** in ignored `data/raw/HI-Small_prefix.csv`, with its acquisition manifest and `data/ibm-prefix.sqlite`. It verifies ingestion only. This Git repository does not distribute that file; a fresh clone needs its own download. Do not mix the prefix and the full file in one database: overlapping exports have different hashes and are not automatically reconciled.
 
