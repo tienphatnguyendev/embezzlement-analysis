@@ -19,12 +19,11 @@ def main():
         parser.error('--timeout must be positive')
 
     runtime = root / 'work/jupyter-runtime'
-    for directory in ['runtime', 'ipython', 'matplotlib']:
+    for directory in ['runtime', 'ipython']:
         (runtime / directory).mkdir(parents=True, exist_ok=True)
     os.environ['JUPYTER_PATH'] = str(runtime / 'share/jupyter') + os.pathsep + os.environ.get('JUPYTER_PATH', '')
     os.environ['JUPYTER_RUNTIME_DIR'] = str(runtime / 'runtime')
     os.environ['IPYTHONDIR'] = str(runtime / 'ipython')
-    os.environ['MPLCONFIGDIR'] = str(runtime / 'matplotlib')
     os.environ['EMBEZZLEMENT_REPO_ROOT'] = str(root)
     subprocess.run([sys.executable, '-m', 'ipykernel', 'install', '--prefix', str(runtime),
                     '--name', 'embezzlement-eda', '--display-name', 'Python (Embezzlement EDA)'],
@@ -33,6 +32,7 @@ def main():
     import nbformat
     from nbclient import NotebookClient
     from nbconvert import HTMLExporter
+    from eda_design import stylesheet
 
     source = root / 'notebooks/hi_small_eda.ipynb'
     output_dir = root / 'reports/eda'
@@ -54,10 +54,15 @@ def main():
         raise RuntimeError('Notebook contains error outputs')
     executed = output_dir / 'hi_small_eda.executed.ipynb'
     nbformat.write(notebook, executed)
-    exporter = HTMLExporter(template_name='classic')
+    exporter = HTMLExporter(template_name='basic')
+    exporter.exclude_input = True
     exporter.exclude_input_prompt = True
     exporter.exclude_output_prompt = True
-    html, _ = exporter.from_notebook_node(notebook)
+    body, _ = exporter.from_notebook_node(notebook)
+    html = ('<!doctype html><html lang="en"><head><meta charset="utf-8">'
+            '<meta name="viewport" content="width=device-width,initial-scale=1">'
+            '<title>IBM HI-Small exploratory analysis</title><style>' + stylesheet() + '</style>'
+            '</head><body><main class="eda-document">' + body + '</main></body></html>')
     preview = output_dir / 'hi_small_eda.html'
     preview.write_text(html, encoding='utf-8')
     report = {
@@ -67,8 +72,13 @@ def main():
         'cell_count': len(notebook.cells),
         'executed_code_cells': sum(cell.cell_type == 'code' and cell.execution_count is not None for cell in notebook.cells),
         'error_outputs': len(errors),
-        'embedded_figure_outputs': sum('image/png' in output.get('data', {})
+        'visualization_library': 'Plotly',
+        'interactive_figure_outputs': sum('application/vnd.plotly.v1+json' in output.get('data', {})
                                       for cell in notebook.cells for output in cell.get('outputs', [])),
+        'static_image_outputs': sum('image/png' in output.get('data', {})
+                                   for cell in notebook.cells for output in cell.get('outputs', [])),
+        'design_helper_sha256': hashlib.sha256((root / 'notebooks/eda_design.py').read_bytes()).hexdigest(),
+        'design_css_sha256': hashlib.sha256((root / 'notebooks/eda_style.css').read_bytes()).hexdigest(),
     }
     (output_dir / 'execution-report.json').write_text(json.dumps(report, indent=2) + '\n')
     print(json.dumps(report, indent=2), flush=True)

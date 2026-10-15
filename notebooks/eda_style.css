@@ -1,0 +1,41 @@
+/* Deloitte Data Design tokens, adapted for a local research notebook. */
+:root { --surface:#FFFFFF; --surface-quiet:#E6E6E6; --surface-brand:#F1F6E4;
+  --text:#000000; --text-muted:#53565A; --line:#BBBCBC; --focus:#86BC25; }
+html { background:var(--surface); color:var(--text); }
+body, .jp-Notebook, #notebook-container { font-family:'Open Sans',Aptos,'Segoe UI',Arial,sans-serif;
+  font-size:14px; line-height:22px; background:var(--surface); color:var(--text); }
+body { margin:0; }
+.eda-document { max-width:1200px; margin:0 auto; padding:32px 24px 48px; }
+h1 { font-size:32px; line-height:40px; font-weight:700; margin:24px 0; }
+h2 { font-size:24px; line-height:32px; font-weight:600; margin:32px 0 16px; }
+h3 { font-size:18px; line-height:26px; font-weight:600; margin:24px 0 12px; }
+p, ul, ol { margin:12px 0; }
+a { color:var(--text); text-decoration:underline; text-underline-offset:3px; }
+.anchor-link { display:none; }
+a:focus-visible, button:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
+  outline:2px solid var(--text); outline-offset:2px; }
+.eda-draft { font-size:12px; line-height:16px; color:var(--text-muted);
+  border-left:4px solid var(--line); padding:8px 12px; background:var(--surface-quiet); }
+.eda-subtitle, figcaption, .eda-caption { color:var(--text-muted); font-size:12px; line-height:16px; }
+.eda-figure { margin:24px 0 32px; border:0; background:var(--surface); }
+.eda-plot { min-width:640px; }
+.eda-figure { overflow-x:auto; }
+figcaption p, .eda-caption p { margin:8px 0; }
+.eda-table { max-width:100%; overflow-x:auto; margin:16px 0 24px; }
+.eda-table table, .rendered_html table { border-collapse:collapse; font-family:inherit;
+  font-size:13px; line-height:20px; width:100%; border:0; }
+.eda-table th, .rendered_html th { background:var(--text); color:var(--surface); font-size:12px;
+  line-height:16px; font-weight:700; padding:8px 12px; text-align:left; border:0; }
+.eda-table td, .rendered_html td { padding:8px 12px; border:0; border-bottom:1px solid var(--line);
+  color:var(--text); background:var(--surface); vertical-align:top; overflow-wrap:anywhere; }
+.eda-table tr:hover td { background:var(--surface); }
+.input_area { background:var(--surface-quiet); padding:12px 16px; overflow:auto; }
+.input_area pre, code, pre { font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+  font-size:12px; line-height:18px; color:var(--text); }
+.input_area span { color:var(--text); background:var(--surface-quiet); }
+.prompt { display:none; }
+.cell { margin-bottom:16px; }
+.output_wrapper, .output, .output_subarea { max-width:100%; }
+.output_stderr { background:var(--surface-quiet); color:var(--text); }
+@media (max-width:768px) { .eda-document { padding:16px; } h1 { font-size:24px; line-height:32px; }
+  h2 { font-size:20px; line-height:28px; } }
