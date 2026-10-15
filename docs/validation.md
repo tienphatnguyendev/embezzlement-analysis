@@ -2,7 +2,7 @@
 
 Date: 2026-10-15. Environment: macOS, Python 3.9.6, standard-library SQLite.
 
-- `python3 -m unittest discover -s tests -q`: 103 tests passed after version 0.2 integration (initial baseline: 47).
+- `python3 -m unittest discover -s tests -q`: 119 tests passed after version 0.3 integration (version 0.2: 103; initial baseline: 47).
 - `python3 -m compileall -q embezzlement_analysis`: passed.
 - Editable package build/install and installed `embezzlement-analysis --help`: passed in `.venv`. The system's old pip did not support this editable build; the documented setup now upgrades pip inside the virtual environment first.
 - Authored demo: 8 imported transaction records, 3 candidate paths, no truncation. Two overlapping paths carry the explicitly supplied employee relationship; the supplier-payroll lookalike remains a candidate without that relationship.
@@ -11,5 +11,6 @@ Date: 2026-10-15. Environment: macOS, Python 3.9.6, standard-library SQLite.
 - Independent code review found four issues: identity whitespace normalization, invalid CLI numeric arguments, context fingerprint consistency, and numeric conversion resource bounds. Added regression tests, fixed all four, and obtained a clean focused re-review.
 - Version 0.2 cross-review identified missing purchase/payment approver comparison and an incomplete saved-report count. Both now have regression coverage and clean scoped re-review. Master matching and IBM context integration received independent review without remaining material findings.
 - Complete authored investigation: 3 path candidates, 2 master matches, 7 invoice/approval exceptions and 5 vendor/path links, with no truncation. These are overlapping review outputs, not independent confirmed incidents. The benign supplier remains free of procurement and employee-overlap findings.
+- Complete publisher version-8 ledger: 5,078,345 rows validated/imported, all endpoints joined, SQLite quick-check `ok`. Exhaustive two-payment scan: 905 candidates, no truncation, 448 unique selected transactions, all label 0. Candidate output hash and all raw source hashes are preserved in the local run artifacts. Independently checked against CSV counts and reviewed selector against a brute-force oracle.
 
 No fraud-accuracy, loss-recovery, or production-readiness claim is made. Future validation is specified in [evaluation.md](evaluation.md).

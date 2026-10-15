@@ -41,6 +41,15 @@ def make_parser():
     add_master_arguments(investigation)
     add_invoice_arguments(investigation)
     add_check_arguments(investigation)
+    scan = commands.add_parser('scan', help='Scan every business-business-person two-payment chain')
+    scan.add_argument('--db', required=True)
+    scan.add_argument('--ibm-accounts', required=True)
+    scan.add_argument('--candidates', required=True, help='New JSONL file for all selected chains')
+    scan.add_argument('--window-hours', type=float, default=72)
+    scan.add_argument('--min-ratio', type=decimal_argument, default=Decimal('0.8'))
+    scan.add_argument('--max-ratio', type=decimal_argument, default=Decimal('1.05'))
+    scan.add_argument('--max-examples', type=int, default=20)
+    scan.add_argument('--output', help='New JSON summary path')
     return parser
 
 
@@ -177,6 +186,16 @@ def build_checks_report(args):
             'conclusion': 'Evidence exceptions for review; embezzlement is not established.', **result}
 
 
+def build_scan_report(args):
+    from .batch import scan_dataset
+    result = scan_dataset(args.db, args.ibm_accounts, args.candidates,
+                          window_hours=args.window_hours, min_ratio=args.min_ratio,
+                          max_ratio=args.max_ratio, max_examples=args.max_examples)
+    return {'schema_version': '1', 'tool_version': __version__,
+            'created_at': datetime.now(timezone.utc).isoformat(),
+            'analysis_type': 'dataset_scan', **result}
+
+
 def main(argv=None):
     parser = make_parser()
     args = parser.parse_args(argv)
@@ -186,10 +205,16 @@ def main(argv=None):
             result = ingest_csv(args.csv, args.db)
             print(json.dumps(result, indent=2))
         else:
+            if args.output and Path(args.output).exists():
+                raise FileExistsError('Report already exists: ' + args.output)
+            if args.command == 'scan' and args.output and Path(args.output).resolve() == Path(args.candidates).resolve():
+                raise ValueError('Summary and candidate output paths must differ')
             if args.command == 'investigate':
                 result = build_investigation(args)
             elif args.command == 'trace':
                 result = build_report(args)
+            elif args.command == 'scan':
+                result = build_scan_report(args)
             else:
                 result = build_checks_report(args)
             payload = json.dumps(result, indent=2, ensure_ascii=False) + '\n'
@@ -198,7 +223,7 @@ def main(argv=None):
                 target.parent.mkdir(parents=True, exist_ok=True)
                 with target.open('x', encoding='utf-8') as stream:
                     stream.write(payload)
-                summary = {'report': str(target), 'finding_count': len(result['findings']),
+                summary = {'report': str(target), 'finding_count': len(result.get('findings', [])),
                            'truncated': result['truncated']}
                 if args.command in ('trace', 'investigate'):
                     summary['candidate_paths'] = len(result['findings'])
@@ -207,6 +232,9 @@ def main(argv=None):
                     summary['invoice_findings'] = len(result['invoice_checks']['findings'])
                     summary['vendor_links'] = len(result['path_vendor_links'])
                     summary['finding_count'] += summary['master_findings'] + summary['invoice_findings']
+                if args.command == 'scan':
+                    summary['finding_count'] = result['candidate_count']
+                    summary['candidates'] = args.candidates
                 print(json.dumps(summary))
             else:
                 print(payload, end='')

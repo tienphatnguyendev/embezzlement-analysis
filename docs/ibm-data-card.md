@@ -43,3 +43,5 @@ This prefix is an ingestion smoke test. It is not random, representative, or a v
 ## Leakage and evaluation
 
 The [publisher's dataset description](https://www.kaggle.com/api/v1/datasets/view/ealtman2019/ibm-transactions-for-anti-money-laundering-aml) warns that the tail after the main activity period contains only laundering transactions. Audit this artifact before modeling. Keep laundering labels and pattern-file membership out of detector features; keep connected case records together during evaluation. Compare outcomes on full authorized windows and document data coverage. Synthetic AML results cannot be reported as confirmed embezzlement accuracy.
+
+The full version-8 audit performed on 2026-10-15 contradicts the literal all-laundering claim: September 11–18 contains 1,108 transactions, with 655 label-1 and 453 label-0 rows. The tail remains strongly enriched. The complete ledger contains 5,078,345 transactions and 5,177 label-1 rows; all endpoints join to metadata. [Full run method](full-hi-small-method.md) and the local `reports/hi-small-findings.md` document the measured results.

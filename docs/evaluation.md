@@ -2,7 +2,7 @@
 
 ## Current evidence
 
-Unit tests verify implementation behavior. The authored demo verifies end-to-end reporting. The publisher prefix verifies format compatibility. None measures embezzlement-detection accuracy. No model has been trained and no full HI-Small benchmark has been run.
+Unit tests verify implementation behavior. The authored demo verifies end-to-end reporting. A complete HI-Small retrospective scan has now been run: 905 candidate chains, 448 unique selected transactions, no selected laundering-labeled transactions. [Measured results](full-hi-small-results.md) document its coverage and limits. No model has been trained, no held-out evaluation has been performed, and these labels cannot measure confirmed embezzlement accuracy.
 
 ## Next experiment
 
