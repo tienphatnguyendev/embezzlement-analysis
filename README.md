@@ -22,6 +22,7 @@ An optional editable installation exposes `embezzlement-analysis` as a command:
 
 ```sh
 python3 -m venv .venv
+.venv/bin/python -m pip install --upgrade pip
 .venv/bin/python -m pip install -e .
 ```
 
