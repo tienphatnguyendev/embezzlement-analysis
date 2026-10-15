@@ -1,6 +1,8 @@
 # HI-Small exploratory notebook
 
-`hi_small_eda.ipynb` profiles the full ledger and examines the saved two-payment candidate scan. It recomputes aggregate SQL results, checks them against the independent audit, and validates all saved candidate IDs. Database access is read-only. It does not rerun acquisition, import or detection.
+`hi_small_eda.ipynb` profiles the full ledger and examines the saved two-payment candidate scan. It recomputes aggregate SQL results, checks them against the independent audit, and validates all saved candidate IDs. Database access is read-only. It does not rerun acquisition, import or the saved transaction-path scan.
+
+The advanced sections quantify temporal distribution shifts, adjust the main/tail label-rate comparison for category mix, compare account and entity networks, and test two anomaly rankings with an earlier-fit/later-score split. [Methods and review decisions](../docs/eda-methods.md) explains the assumptions and evaluation boundaries.
 
 Install the optional EDA environment from the repository root:
 
@@ -35,4 +37,6 @@ Ledger counts and category summaries use all 5,078,345 transaction rows. The amo
 
 The candidate section loads all 905 saved paths and distinguishes their 448 distinct transactions. It preserves exact amount strings and validates ratios with rational arithmetic; floating-point values are used only for plots and display. Candidate concentration is not an incident count or a loss estimate. The dataset's synthetic laundering label is not confirmed embezzlement ground truth.
 
-Environment versions are displayed in the notebook. The verified execution used Python 3.9, pandas 2.3.3, numpy 2.0.2 and matplotlib 3.9.4. Per-cell timeout defaults to 300 seconds and can be increased with `--timeout` on slower machines.
+The anomaly experiment uses all main-period USD-to-USD transactions, aggregated by sender account and day. It fits September 1–7 profiles and scores September 8–10 profiles after each day closes. It uses floating-point amount aggregates for exploratory features. Labels enter only post-ranking diagnostics. Full-period graph measures and retrospective distribution comparisons do not enter this model.
+
+Environment versions are displayed in the notebook. The environment uses Python 3.9, pandas 2.3.3, numpy 2.0.2, matplotlib 3.9.4 and scikit-learn 1.6.1. Per-cell timeout defaults to 300 seconds and can be increased with `--timeout` on slower machines.
