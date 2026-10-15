@@ -1,4 +1,4 @@
-"""Execute the EDA with this Python environment and export a static HTML view."""
+"""Execute the EDA with this Python environment and export an offline interactive HTML view."""
 
 import argparse
 import hashlib
@@ -25,6 +25,7 @@ def main():
     os.environ['JUPYTER_RUNTIME_DIR'] = str(runtime / 'runtime')
     os.environ['IPYTHONDIR'] = str(runtime / 'ipython')
     os.environ['EMBEZZLEMENT_REPO_ROOT'] = str(root)
+    os.environ['EMBEZZLEMENT_NOTEBOOK_EXPORT'] = '1'
     subprocess.run([sys.executable, '-m', 'ipykernel', 'install', '--prefix', str(runtime),
                     '--name', 'embezzlement-eda', '--display-name', 'Python (Embezzlement EDA)'],
                    check=True, capture_output=True, text=True)

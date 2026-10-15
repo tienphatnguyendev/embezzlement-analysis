@@ -7,7 +7,9 @@ This module changes presentation only. It does not claim Deloitte authorship.
 import base64
 import html
 import json
+import os
 import re
+import sys
 from pathlib import Path
 
 import plotly.graph_objects as go
@@ -30,6 +32,11 @@ CONFIG = {'responsive': True, 'displaylogo': False, 'scrollZoom': False,
 _bundle_shown = False
 
 
+def _colab_output():
+    return (not os.environ.get('EMBEZZLEMENT_NOTEBOOK_EXPORT')
+            and ('google.colab' in sys.modules or bool(os.environ.get('COLAB_RELEASE_TAG'))))
+
+
 def stylesheet():
     """Embed the licensed Open Sans Latin variable font for offline viewing."""
     assets = Path(__file__).resolve().parent / 'assets'
@@ -44,7 +51,11 @@ def install_notebook_style():
     from IPython.display import HTML, display
     # Run All can reuse a module already imported by this notebook's kernel.
     _bundle_shown = False
-    display(HTML('<style>' + stylesheet() + '</style>'))
+    import plotly.io as pio
+    pio.templates['embezzlement_eda'] = plotly_template()
+    pio.templates.default = 'embezzlement_eda'
+    if not _colab_output():
+        display(HTML('<style>' + stylesheet() + '</style>'))
 
 
 def plotly_template():
@@ -88,8 +99,11 @@ def show_table(frame, formats=None):
     labels = {column: str(column).replace('_', ' ').strip().capitalize()
               if '_' in str(column) else str(column) for column in view.columns}
     styled = styled.relabel_index([labels[c] for c in view.columns], axis='columns')
-    display(HTML('<div class="eda-table" tabindex="0" aria-label="Analysis table">'
-                 + styled.to_html() + '</div>'))
+    markup = ('<div class="eda-table" tabindex="0" aria-label="Analysis table">'
+              + styled.to_html() + '</div>')
+    if _colab_output():
+        markup = '<style>' + stylesheet() + '</style>' + markup
+    display(HTML(markup))
 
 
 def validate_figure(fig):
@@ -149,7 +163,9 @@ def finish_figure(fig, name, title, subtitle='', note='', height=500, output_dir
         return ('<figure class="eda-figure" aria-label="' + html.escape(title, quote=True) + '">'
                 + '<div class="eda-plot">' + fragment + '</div>'
                 + (caption if include_caption else '') + '</figure>')
-    fragment = fig.to_html(full_html=False, include_plotlyjs=not _bundle_shown,
+    in_colab = _colab_output()
+    # Colab isolates outputs. Its official renderer also loads a versioned CDN per frame.
+    fragment = fig.to_html(full_html=False, include_plotlyjs='cdn' if in_colab else not _bundle_shown,
                            config=CONFIG, div_id='eda-' + name)
     _bundle_shown = True
     standalone = ('<!doctype html><html lang="en"><head><meta charset="utf-8">'
@@ -160,9 +176,12 @@ def finish_figure(fig, name, title, subtitle='', note='', height=500, output_dir
                                      div_id='eda-' + name)) + '</main></body></html>')
     (output_dir / (name + '.html')).write_text(standalone, encoding='utf-8')
     (output_dir / (name + '.plotly.json')).write_text(fig.to_json(), encoding='utf-8')
-    display({'application/vnd.plotly.v1+json': spec,
-             'text/html': wrap(fragment, include_caption=False)}, raw=True)
-    from IPython.display import HTML
-    display(HTML(caption.replace('<figcaption>', '<div class="eda-caption" role="note">')
-                       .replace('</figcaption>', '</div>')))
+    if in_colab:
+        display({'text/html': '<style>' + stylesheet() + '</style>' + wrap(fragment)}, raw=True)
+    else:
+        display({'application/vnd.plotly.v1+json': spec,
+                 'text/html': wrap(fragment, include_caption=False)}, raw=True)
+        from IPython.display import HTML
+        display(HTML(caption.replace('<figcaption>', '<div class="eda-caption" role="note">')
+                           .replace('</figcaption>', '</div>')))
     return {'name': name, 'title': title, 'traces': len(fig.data), 'source': SOURCE}

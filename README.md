@@ -6,6 +6,8 @@ The repository combines an [ACFE methodology review](docs/acfe-methodology.md), 
 
 The [EDA notebook](notebooks/hi_small_eda.ipynb) explores the full ledger, source coverage, temporal artifacts, currency-specific amounts and overlapping candidate paths. Advanced sections add distribution-shift analysis, account/entity network measures, and chronological anomaly ranking. [Notebook setup and execution](notebooks/README.md) · [Methods and review decisions](docs/eda-methods.md).
 
+[Open in Google Colab](https://colab.research.google.com/github/tienphatnguyendev/embezzlement-analysis/blob/main/notebooks/hi_small_eda.ipynb). The notebook includes an interactive setup cell for the prepared private Drive input archive; see the [Colab instructions](notebooks/README.md#interact-in-google-colab).
+
 All ten figures use interactive Plotly visualizations styled with the user-selected Deloitte Data Design system. [Presentation review](docs/eda-design-review.md) records the tokens, font provenance and browser checks.
 
 ## Public EDA outputs

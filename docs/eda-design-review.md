@@ -41,6 +41,12 @@ Titles state findings in sentence case. Scope and units appear below titles. Tab
 
 ## Final quality check
 
-**Pass for local implementation.** The final run completed 33 code cells and ten interactive Plotly figures with zero errors and no PNG figure outputs. The colour gate passes for the notebook source, theme, CSS and all ten figure specifications. Browser checks confirm all ten charts, 27 tables, ten source captions, loaded Open Sans, working hover/zoom/reset, no page-wide horizontal overflow at the checked viewport, and no console errors or warnings. Automatic margins fix the clipped recipient labels; the repeated-Run-All test confirms exactly one offline Plotly bundle per run. All 119 repository tests pass. External brand approval remains subject to the flags above.
+**Pass for local implementation.** The current local run completed 34 code cells and ten interactive Plotly figures with zero errors and no PNG figure outputs. The colour gate passes for the notebook source, theme, CSS and all ten figure specifications. The prior offline browser review confirmed all ten charts, 27 tables, ten source captions, loaded Open Sans, working hover/zoom/reset, no page-wide horizontal overflow at the checked viewport, and no console errors or warnings. Automatic margins fix the clipped recipient labels; the repeated-Run-All test confirms exactly one offline Plotly bundle per run. All 119 repository tests pass. External brand approval remains subject to the flags above.
 
 Colour check: PASS (authored source, theme and figure specifications).
+
+## Colab interaction support
+
+The source now includes an optional Colab bootstrap cell, bringing it to 58 cells and 34 code cells. The full local run passed in 313.0 seconds with ten Plotly outputs and zero errors. Seven fixture tests cover input extraction/cache reuse, invalid archives, package restart guidance, independent chart outputs, and batch-export isolation. Each Colab output carries its own CSS, embedded font, caption and versioned Plotly CDN loader; offline exported pages still embed JavaScript.
+
+Two independent browser frames rendered the Colab output HTML and the first chart's zoom control changed its axes. That QA page logged one unattributed MutationObserver error; this check does not establish an error-free hosted Colab environment. A signed-in Colab runtime has not been tested. All 119 existing repository tests also passed. Analytical queries, filters and model settings remain unchanged.
